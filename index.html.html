@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Growing Crystals in a Kiln — Crystalline Glaze Firing</title>
+<style>
+  :root {
+    --charcoal: #4E5166;
+    --slate: #7C90A0;
+    --khaki: #B5AA9D;
+    --ash: #B9B7A7;
+    --dim: #747274;
+    --mauve: #734B5E;
+    --bg: #E7E5DE;
+    --panel: #F1F0EA;
+    --line: rgba(78,81,102,0.18);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--charcoal);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 0 22px; }
+
+  header { padding: 56px 0 36px; }
+  h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 600; font-size: clamp(32px, 5.5vw, 50px);
+    line-height: 1.1; margin: 0 0 16px; color: var(--charcoal);
+  }
+  h1 .accent { color: var(--slate); }
+  .lede { font-size: 18px; color: var(--dim); max-width: 32em; margin: 0; }
+
+  .lab {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 0 0 44px;
+  }
+  .lab-label {
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--dim); margin: 0 0 16px;
+  }
+  svg { display: block; width: 100%; height: auto; }
+
+  .controls { margin: 20px 0 4px; }
+  .ctrl { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .ctrl label { flex: 0 0 132px; font-size: 14px; color: var(--charcoal); }
+  .ctrl .val {
+    flex: 0 0 78px; text-align: right;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 14px; color: var(--charcoal);
+  }
+  input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    flex: 1; height: 4px; border-radius: 2px;
+    background: var(--ash); outline: none; cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--slate); border: 3px solid var(--panel); box-shadow: 0 0 0 1px var(--slate);
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--slate); border: 3px solid var(--panel); box-shadow: 0 0 0 1px var(--slate);
+  }
+  input[type=range]:focus-visible { box-shadow: 0 0 0 3px rgba(124,144,160,0.4); }
+
+  .result-row { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 22px; }
+  .tile-col { flex: 0 0 auto; text-align: center; }
+  #tile { width: 168px; height: 168px; border-radius: 6px; }
+  .tile-cap { font-size: 14px; font-weight: 600; margin-top: 10px; color: var(--charcoal); }
+  .readout { flex: 1 1 260px; min-width: 230px; }
+  .badge {
+    display: inline-block; font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 4px; margin-bottom: 10px;
+  }
+  .badge.good { background: rgba(124,144,160,0.28); color: #3A4654; }
+  .badge.warn { background: rgba(115,75,94,0.22); color: #5A3A49; }
+  .readout p { margin: 0; font-size: 15px; color: var(--dim); }
+
+  .phases { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--line); }
+  .phases-title { font-size: 14px; font-weight: 600; margin: 0 0 12px; }
+  .phase-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .phase-btns button {
+    font-family: inherit; font-size: 14px;
+    padding: 7px 13px; border-radius: 6px; cursor: pointer;
+    background: transparent; border: 1px solid var(--line); color: var(--dim);
+  }
+  .phase-btns button:hover { border-color: var(--slate); color: var(--charcoal); }
+  .phase-btns button[aria-pressed=true] {
+    background: var(--slate); border-color: var(--slate); color: #fff;
+  }
+  #phase-text { font-size: 15px; color: var(--dim); margin: 0; }
+
+  section.note { margin-bottom: 44px; }
+  section.note h2 {
+    font-family: Georgia, serif; font-weight: 600; font-size: 23px; margin: 0 0 10px; color: var(--charcoal);
+  }
+  section.note p { font-size: 16px; color: var(--dim); max-width: 34em; margin: 0; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-bottom: 52px; }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; gap: 28px; } }
+
+  footer { border-top: 1px solid var(--line); padding: 24px 0 56px; font-size: 13px; color: var(--dim); }
+  footer .disclaimer { max-width: 40em; }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <h1>Growing crystals in a <span class="accent">kiln</span></h1>
+  <p class="lede">Crystalline glazes don't get their starbursts from the recipe — they get them from the firing. Move the schedule below and watch the crystals form.</p>
+</header>
+
+<div class="wrap">
+  <div class="lab">
+    <p class="lab-label">The firing lab</p>
+
+    <svg viewBox="0 0 680 300" role="img" aria-label="Firing schedule graph: temperature over time">
+      <text x="64" y="28" font-size="12" fill="#747274" font-family="ui-monospace, monospace">temperature (°C)</text>
+      <line x1="64" y1="46" x2="64" y2="250" stroke="#4E5166" stroke-opacity="0.3" stroke-width="1"/>
+      <line x1="64" y1="250" x2="624" y2="250" stroke="#4E5166" stroke-opacity="0.3" stroke-width="1"/>
+      <text x="624" y="270" font-size="12" fill="#747274" font-family="ui-monospace, monospace" text-anchor="end">time →</text>
+
+      <rect id="window-band" x="64" y="110" width="560" height="29" fill="#7C90A0" opacity="0.22"/>
+      <text x="620" y="104" font-size="11" fill="#4E5166" font-family="ui-monospace, monospace" text-anchor="end">crystal growth window</text>
+
+      <rect id="hold-band" x="295" y="46" width="115" height="204" fill="#B5AA9D" opacity="0.4"/>
+
+      <rect id="hit-ramp"  x="64"  y="46" width="136" height="204" fill="transparent" style="cursor:pointer"/>
+      <rect id="hit-peak"  x="200" y="46" width="40"  height="204" fill="transparent" style="cursor:pointer"/>
+      <rect id="hit-crash" x="240" y="46" width="55"  height="204" fill="transparent" style="cursor:pointer"/>
+      <rect id="hit-hold"  x="295" y="46" width="115" height="204" fill="transparent" style="cursor:pointer"/>
+      <rect id="hit-cool"  x="410" y="46" width="214" height="204" fill="transparent" style="cursor:pointer"/>
+
+      <path id="curve" d="" fill="none" stroke="#4E5166" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect id="active-outline" x="0" y="46" width="0" height="204" fill="none" stroke="#7C90A0" stroke-width="1.5" stroke-dasharray="4 3" rx="4" opacity="0"/>
+    </svg>
+
+    <div class="controls">
+      <div class="ctrl">
+        <label for="peak">Peak temperature</label>
+        <input type="range" id="peak" min="1220" max="1310" step="2" value="1280">
+        <span class="val" id="peak-value">1280 °C</span>
+      </div>
+      <div class="ctrl">
+        <label for="hold">Hold temperature</label>
+        <input type="range" id="hold" min="570" max="1100" step="2" value="1000">
+        <span class="val" id="hold-value">1000 °C</span>
+      </div>
+      <div class="ctrl">
+        <label for="duration">Hold time</label>
+        <input type="range" id="duration" min="0" max="4" step="0.25" value="2">
+        <span class="val" id="duration-value">2 hrs</span>
+      </div>
+    </div>
+
+    <div class="result-row">
+      <div class="tile-col">
+        <svg id="tile" viewBox="0 0 168 168" role="img" aria-label="Resulting glaze surface">
+          <rect x="0" y="0" width="168" height="168" fill="#4E5166"/>
+          <g id="crystals"></g>
+        </svg>
+        <div class="tile-cap" id="result-head">Medium starbursts</div>
+      </div>
+      <div class="readout">
+        <span class="badge good" id="result-badge">In the window</span>
+        <p id="result-sub">Solid growth with clear, defined crystals — a classic crystalline result.</p>
+      </div>
+    </div>
+
+    <div class="phases">
+      <p class="phases-title">What happens in each phase?</p>
+      <div class="phase-btns" id="phase-btns">
+        <button data-p="ramp">Ramp up</button>
+        <button data-p="peak">Peak melt</button>
+        <button data-p="crash">Crash cool</button>
+        <button data-p="hold" aria-pressed="true">Growth hold</button>
+        <button data-p="cool">Cool down</button>
+      </div>
+      <p id="phase-text">The crucial phase. Held inside the growth window, zinc-silicate seeds nucleate and spread outward into starbursts. Longer holds near the ideal temperature grow bigger crystals.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <section class="note">
+      <h2>Why crash the temperature?</h2>
+      <p>Cool too slowly and crystals seed everywhere at once, staying small and muddy. A fast drop to the growth window lets you control exactly when and where they start — so the hold that follows grows a few clean, large starbursts instead of a fog of tiny ones.</p>
+    </section>
+    <section class="note">
+      <h2>The zinc-silicate seed</h2>
+      <p>These glazes are loaded with zinc oxide and silica. In the molten glass they stay dissolved, but inside the growth window they bond into zinc silicate and crystallize outward in radiating spokes — the starburst you see on the finished pot.</p>
+    </section>
+  </div>
+</div>
+
+<script>
+(function(){
+  var peakInput=document.getElementById('peak'),holdInput=document.getElementById('hold'),durationInput=document.getElementById('duration');
+  var peakValue=document.getElementById('peak-value'),holdValue=document.getElementById('hold-value'),durationValue=document.getElementById('duration-value');
+  var curve=document.getElementById('curve'),holdBand=document.getElementById('hold-band');
+  var crystals=document.getElementById('crystals'),outline=document.getElementById('active-outline');
+  var rHead=document.getElementById('result-head'),rSub=document.getElementById('result-sub'),rBadge=document.getElementById('result-badge');
+  var phaseText=document.getElementById('phase-text');
+  var current='hold';
+  var x1=200,x2=240,x3=295,xEnd=624,y0=250;
+
+  function tempToY(t){ return 250-(t-550)/770*200; }
+
+  var summaries={
+    ramp:'The kiln climbs toward peak. Glaze ingredients melt together into a smooth, glassy liquid. No crystals yet — everything is dissolving.',
+    peak:'At full temperature the glaze is completely molten. Zinc and silica are dissolved evenly through the melt, primed to crystallize on the way down.',
+    crash:'A fast drop down to the growth window. Cooling quickly keeps crystals from forming early in random, uncontrolled spots.',
+    hold:'The crucial phase. Held inside the growth window, zinc-silicate seeds nucleate and spread outward into starbursts. Longer holds near the ideal temperature grow bigger crystals.',
+    cool:'Below the window the melt freezes solid and locks every crystal in place. Whatever grew during the hold is what the finished piece shows.'
+  };
+  var hitIds={ramp:'hit-ramp',peak:'hit-peak',crash:'hit-crash',hold:'hit-hold',cool:'hit-cool'};
+
+  function positionOutline(){
+    var r=document.getElementById(hitIds[current]);
+    if(!r){ outline.setAttribute('opacity','0'); return; }
+    outline.setAttribute('x',r.getAttribute('x'));
+    outline.setAttribute('width',r.getAttribute('width'));
+    outline.setAttribute('opacity','1');
+  }
+  function setPhase(p){
+    current=p;
+    phaseText.textContent=summaries[p];
+    var btns=document.querySelectorAll('#phase-btns button');
+    btns.forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.p===p ? 'true':'false'); });
+    positionOutline();
+  }
+  document.querySelectorAll('#phase-btns button').forEach(function(b){
+    b.addEventListener('click', function(){ setPhase(b.dataset.p); });
+  });
+  Object.keys(hitIds).forEach(function(p){
+    document.getElementById(hitIds[p]).addEventListener('click', function(){ setPhase(p); });
+  });
+
+  function drawCrystals(size, count){
+    crystals.innerHTML='';
+    // positions ordered center -> outer, so the OUTER ones appear/disappear as the count changes
+    var pos=[[84,84],[60,64],[108,62],[62,108],[110,106],[84,34],[34,84],[134,84],[84,134]];
+    var r=10+size*52, spokes=14;
+    for(var i=0;i<count && i<pos.length;i++){
+      var cx=pos[i][0], cy=pos[i][1];
+      var rr=r*(0.7+0.3*((i*37)%10)/10);
+      for(var s=0;s<spokes;s++){
+        var a=s/spokes*Math.PI*2;
+        var ln=document.createElementNS('http://www.w3.org/2000/svg','line');
+        ln.setAttribute('x1',cx); ln.setAttribute('y1',cy);
+        ln.setAttribute('x2',(cx+Math.cos(a)*rr).toFixed(1));
+        ln.setAttribute('y2',(cy+Math.sin(a)*rr).toFixed(1));
+        ln.setAttribute('stroke','#E2E0D8'); ln.setAttribute('stroke-width','1');
+        ln.setAttribute('opacity',(0.4+size*0.5).toFixed(2));
+        crystals.appendChild(ln);
+      }
+      var c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx',cx); c.setAttribute('cy',cy);
+      c.setAttribute('r',(1.8+size*3).toFixed(1)); c.setAttribute('fill','#EFEEE8');
+      crystals.appendChild(c);
+    }
+  }
+
+  function updateValues(){
+    var peak=+peakInput.value, hold=+holdInput.value, duration=+durationInput.value;
+    peakValue.textContent=peak+' °C';
+    holdValue.textContent=hold+' °C';
+    durationValue.textContent=duration+(duration===1?' hr':' hrs');
+
+    var holdW=duration/4*230, x4=x3+holdW, peakY=tempToY(peak), holdY=tempToY(hold);
+    curve.setAttribute('d','M64 '+y0+' L'+x1+' '+peakY.toFixed(1)+' L'+x2+' '+peakY.toFixed(1)+
+      ' L'+x3+' '+holdY.toFixed(1)+' L'+x4.toFixed(1)+' '+holdY.toFixed(1)+' L'+xEnd+' '+y0);
+    holdBand.setAttribute('x',x3);
+    holdBand.setAttribute('width',Math.max(holdW,0.5).toFixed(1));
+    document.getElementById('hit-hold').setAttribute('width',Math.max(holdW,1).toFixed(1));
+    document.getElementById('hit-cool').setAttribute('x',x4.toFixed(1));
+    document.getElementById('hit-cool').setAttribute('width',Math.max(xEnd-x4,1).toFixed(1));
+
+    // crystal growth model
+    // peak controls HOW MANY crystals, hold temp + duration control HOW BIG they are
+    var tempEffect=Math.exp(-Math.pow((hold-1035)/55,2));       // bell curve, best near 1035
+    var durationEffect=1-Math.exp(-duration/1.5);               // grows with time, levels off
+    var peakTempEffect=Math.exp(-Math.pow((peak-1260)/45,2));   // bell curve, busiest near 1260
+    var size=tempEffect*durationEffect;
+    var count=Math.round(peakTempEffect*9);
+    drawCrystals(size,count);
+
+    var head, sub, cls;
+    if(hold>1090){ head='Crystals redissolve'; cls='warn';
+      sub='The hold sits above the growth window, so any crystals melt back into the glass. Lower the hold temperature.'; }
+    else if(hold<980){ head='Melt too stiff'; cls='warn';
+      sub='The hold sits below the window, so the glaze is too viscous for crystals to spread. Raise the hold temperature.'; }
+    else if(duration<0.4){ head='No time to grow'; cls='warn';
+      sub='You are in the window, but with almost no hold the crystals never form. Extend the hold time.'; }
+    else if(size<0.2){ head='Sparse, tiny crystals'; cls='good';
+      sub='Forming, but small. A longer hold or a temperature closer to 1035 °C would grow them larger.'; }
+    else if(size<0.45){ head='Small starbursts'; cls='good';
+      sub='Crystals are spreading slowly. Good direction — try a longer hold.'; }
+    else if(size<0.72){ head='Medium starbursts'; cls='good';
+      sub='Solid growth with clear, defined crystals — a classic crystalline result.'; }
+    else{ head='Large showy starbursts'; cls='good';
+      sub='Long hold right near the ideal temperature, for maximum crystal size.'; }
+
+    rHead.textContent=head;
+    rSub.textContent=sub;
+    rBadge.textContent = cls==='warn' ? 'Outside the window' : 'In the window';
+    rBadge.className = 'badge '+cls;
+    positionOutline();
+  }
+
+  [peakInput,holdInput,durationInput].forEach(function(s){ s.addEventListener('input', updateValues); });
+  setPhase('hold');
+  updateValues();
+})();
+</script>
+
+</body>
+</html>
