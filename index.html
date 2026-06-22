@@ -103,7 +103,15 @@
     font-family: Georgia, serif; font-weight: 600; font-size: 23px; margin: 0 0 10px; color: var(--charcoal);
   }
   section.note p { font-size: 16px; color: var(--dim); max-width: 34em; margin: 0; }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-bottom: 52px; }
+  .notes-box {
+    background: #EDE7DB;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 28px;
+    margin: 0 0 52px;
+  }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-bottom: 0; }
+  .notes-box section.note { margin-bottom: 0; }
   @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; gap: 28px; } }
 
   footer { border-top: 1px solid var(--line); padding: 24px 0 56px; font-size: 13px; color: var(--dim); }
@@ -142,6 +150,18 @@
       <rect id="active-outline" x="0" y="46" width="0" height="204" fill="none" stroke="#7C90A0" stroke-width="1.5" stroke-dasharray="4 3" rx="4" opacity="0"/>
     </svg>
 
+    <div class="phases">
+      <p class="phases-title">What happens in each phase?</p>
+      <div class="phase-btns" id="phase-btns">
+        <button data-p="ramp">Ramp up</button>
+        <button data-p="peak">Peak melt</button>
+        <button data-p="crash">Crash cool</button>
+        <button data-p="hold" aria-pressed="true">Growth hold</button>
+        <button data-p="cool">Cool down</button>
+      </div>
+      <p id="phase-text">The important part. Held in the growth window, the willemite crystals grow outward into branched starbursts. The hold temperature and how long you hold set the size and shape.</p>
+    </div>
+
     <div class="controls">
       <div class="ctrl">
         <label for="peak">Peak temperature</label>
@@ -173,29 +193,19 @@
         <p id="result-sub">Good growth with clear, defined crystals. A pretty classic crystalline result.</p>
       </div>
     </div>
-
-    <div class="phases">
-      <p class="phases-title">What happens in each phase?</p>
-      <div class="phase-btns" id="phase-btns">
-        <button data-p="ramp">Ramp up</button>
-        <button data-p="peak">Peak melt</button>
-        <button data-p="crash">Crash cool</button>
-        <button data-p="hold" aria-pressed="true">Growth hold</button>
-        <button data-p="cool">Cool down</button>
-      </div>
-      <p id="phase-text">The important part. Held in the growth window, the willemite crystals grow outward into branched starbursts. The hold temperature and how long you hold set the size and shape.</p>
-    </div>
   </div>
 
-  <div class="two-col">
-    <section class="note">
-      <h2>Why crash cool the kiln?</h2>
-      <p>Once the kiln hits its peak temperature the glaze is fully melted and any crystals that were there get dissolved. If you cool it slowly from there, crystals start forming all over the place and stay small. Crashing the temperature down fast and then holding it steady gives you way more control. The crystals only really grow during that hold, so you end up with a few big starbursts instead of a bunch of tiny ones.</p>
-    </section>
-    <section class="note">
-      <h2>What's actually crystallizing?</h2>
-      <p>The crystals are willemite, which forms when the zinc oxide and silica in the glaze combine in the melt. A little titanium dioxide gets added as a nucleating agent, basically giving the crystals a spot to start from. Once they get going they grow outward as branched, needle-like crystals radiating from the center, and that's the starburst you see on the finished piece.</p>
-    </section>
+  <div class="notes-box">
+    <div class="two-col">
+      <section class="note">
+        <h2>Why crash cool the kiln?</h2>
+        <p>Once the kiln hits its peak temperature the glaze is fully melted and any crystals that were there get dissolved. If you cool it slowly from there, crystals start forming all over the place and stay small. Crashing the temperature down fast and then holding it steady gives you way more control. The crystals only really grow during that hold, so you end up with a few big starbursts instead of a bunch of tiny ones.</p>
+      </section>
+      <section class="note">
+        <h2>What's actually crystallizing?</h2>
+        <p>The crystals are willemite, which forms when the zinc oxide and silica in the glaze combine in the melt. A little titanium dioxide gets added as a nucleating agent, basically giving the crystals a spot to start from. Once they get going they grow outward as branched, needle-like crystals radiating from the center, and that's the starburst you see on the finished piece.</p>
+      </section>
+    </div>
   </div>
 </div>
 
